@@ -128,7 +128,7 @@ def format_instances(instances):
 def visualize_reasoning_tree_graphviz(root: ReasoningNode, filename="reasoning_tree"):
     """ Uses Graphviz to visualize the reasoning tree with the concept at the top 
         and its retrieved instances displayed separately. """
-    dot = Digraph(format="png")  # Create a directed graph
+    dot = Digraph(format="pdf")  # Create a directed graph
 
     root_id = str(id(root))
     
@@ -183,11 +183,11 @@ def visualize_reasoning_tree(root: ReasoningNode):
 
 EBR = TripleStoreNeuralReasoner(path_of_kb="KGs/Family/father.owl", gamma=0.9)
 reasoner = EBR  
-A =OWLObjectAllValuesFrom(property=OWLObjectProperty(IRI('http://example.com/father#','hasChild')),filler=OWLObjectComplementOf(OWLClass(IRI('http://example.com/father#','male'))))
+A =OWLObjectAllValuesFrom(property=OWLObjectProperty(IRI('http://example.com/father#','hasChild')),filler=OWLClass(IRI('http://example.com/father#','male')))
 
 # A= OWLClass(IRI('http://example.com/father#','person'))
 B = OWLObjectComplementOf(OWLClass(IRI('http://example.com/father#','person')))
-concept = OWLObjectIntersectionOf([A, A])  # Example OWL expression
+concept = OWLObjectIntersectionOf([A, B])  # Example OWL expression
 reasoning_tree = build_reasoning_tree(reasoner, concept)
 visualize_reasoning_tree(reasoning_tree) 
 visualize_reasoning_tree_graphviz(reasoning_tree, "reasoning_tree_output")

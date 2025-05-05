@@ -389,6 +389,8 @@ class TripleStoreNeuralReasoner:
         elif isinstance(expression, OWLObjectOneOf):
             yield from expression.individuals()
         else:
+            # print(expression)
+            # exit(0)
             raise NotImplementedError(f"Instances for {type(expression)} are not implemented yet")
 
 

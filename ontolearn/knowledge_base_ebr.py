@@ -105,6 +105,7 @@ class KnowledgeBaseEBR(AbstractKnowledgeBase):
                  include_implicit_individuals=False,
                  which_reasoner: str,
                  path_kge: str=None, 
+                 gamma:float=None,
                  use_cache: bool = False):
                  
         AbstractKnowledgeBase.__init__(self)
@@ -116,6 +117,7 @@ class KnowledgeBaseEBR(AbstractKnowledgeBase):
         
        
         self.use_cache = use_cache
+        self.gamma = gamma
 
         self.path = path
         self.path_kge = path_kge
@@ -156,7 +158,7 @@ class KnowledgeBaseEBR(AbstractKnowledgeBase):
 
         # Initialize the cache ONCE in the constructor
         self.cache = semantic_caching_size(
-            self.individuals_, cache_size=1024, eviction_strategy="LRU",
+            self.individuals_, cache_size=1024*3, eviction_strategy="LRU",
             random_seed=10, cache_type='cold', concepts=self.concepts_
         )
 
@@ -190,8 +192,8 @@ class KnowledgeBaseEBR(AbstractKnowledgeBase):
             return frozenset(self.ontology.individuals_in_signature())
 
         if self.which_reasoner == "EBR":
-            ebr_reasoner = TripleStoreNeuralReasoner(path_neural_embedding=self.path_kge, gamma=.5) \
-                if self.path_kge else TripleStoreNeuralReasoner(path_of_kb=self.path, gamma=.5)
+            ebr_reasoner = TripleStoreNeuralReasoner(path_neural_embedding=self.path_kge, gamma=self.gamma) \
+                if self.path_kge else TripleStoreNeuralReasoner(path_of_kb=self.path, gamma=self.gamma)
             
             return frozenset(ebr_reasoner.individuals(concept))
 

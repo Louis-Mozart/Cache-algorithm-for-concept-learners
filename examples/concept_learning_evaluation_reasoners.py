@@ -27,11 +27,12 @@ from examples.retrieval_eval_under_incomplete import generate_subgraphs
 import numpy as np
 import os
 from ontolearn.refinement_operators import ExpressRefinement, ModifiedCELOERefinement
+from tqdm import tqdm
 
 pd.set_option("display.precision", 5)
 
 def dl_concept_learning(args):
-    random.seed(8)
+    random.seed(0)
     with open(args.lps) as json_file:
         settings = json.load(json_file)
 
@@ -44,6 +45,8 @@ def dl_concept_learning(args):
     else:
         problems = settings
 
+    problems = dict(random.sample(problems.items(), 10))
+
     if args.lps_difficult:
         with open(args.lps_difficult) as json_file:
             settings_difficult = json.load(json_file)
@@ -52,9 +55,7 @@ def dl_concept_learning(args):
             problems_difficult = settings_difficult['problems']
         else:
             problems_difficult = settings_difficult
-
-        problems = dict(random.sample(problems.items(), 5))
-        problems_difficult = dict(random.sample(problems_difficult.items(), 5))
+        problems_difficult = dict(random.sample(problems_difficult.items(), 10))
     else:
         problems_difficult = {}
 
@@ -62,7 +63,7 @@ def dl_concept_learning(args):
 
     # Prepare paths if needed
     if args.operation in ["incomplete", "inconsistent"]:
-        paths = generate_subgraphs(kb_path=args.kb, directory=f"{args.operation}_{args.data_name}", n=3, ratio=args.ratio, operation=args.operation)
+        paths = generate_subgraphs(kb_path=args.kb, directory=f"{args.operation}_{args.data_name}", n=1, ratio=args.ratio, operation=args.operation)
     else:
         paths = [args.kb]
 
@@ -74,13 +75,13 @@ def dl_concept_learning(args):
         "OCEL": OCEL,
         "CELOE": CELOE,
         "Evo": EvoLearner,
-        "nces2": NCES2,
+        # "nces2": NCES2,
         "clip": CLIP,
-        "roces":ROCES
+        # "roces":ROCES
     }.items():
         learners_per_algo[algo_name] = dict()
         for path in paths:
-            kb_local = KnowledgeBaseEBR(path=path, which_reasoner=args.reasoner, use_cache=args.use_cache, path_kge=None)
+            kb_local = KnowledgeBaseEBR(path=path, which_reasoner=args.reasoner, use_cache=args.use_cache, path_kge=None, gamma=args.gamma)
 
             if algo_name == "Evo":
                 continue  
@@ -114,7 +115,8 @@ def dl_concept_learning(args):
             learners_per_algo[algo_name][path] = learner
 
     # Run each LP
-    for str_target_concept, examples in selected_problems.items():
+    # for str_target_concept, examples in selected_problems.items():
+    for str_target_concept, examples in tqdm(selected_problems.items(), desc="Processing problems"):
         print('\n\nTarget concept:', str_target_concept)
         p = set(examples['positive_examples'])
         n = set(examples['negative_examples'])
@@ -127,16 +129,16 @@ def dl_concept_learning(args):
             "OCEL": OCEL,
             "CELOE": CELOE,
             "Evo": EvoLearner,
-            "nces2": NCES2,
+            # "nces2": NCES2,
             "clip": CLIP,
-            "roces": ROCES
+            # "roces": ROCES
         }.items():
             f1s, runtimes = [], []
 
             for path in paths:
                 try:
                     if algo_name == "Evo":
-                        kb_local = KnowledgeBaseEBR(path=path, which_reasoner=args.reasoner, use_cache=args.use_cache, path_kge=None)
+                        kb_local = KnowledgeBaseEBR(path=path, which_reasoner=args.reasoner, use_cache=args.use_cache, path_kge=None, gamma=args.gamma)
                         learner = learner_cls(
                             knowledge_base=kb_local,
                             quality_func=F1(),
@@ -163,23 +165,24 @@ def dl_concept_learning(args):
 
             if f1s:
                 data.setdefault(f"F1-{algo_name}-mean", []).append(np.mean(f1s))
-                data.setdefault(f"F1-{algo_name}-std", []).append(np.std(f1s))
+                # data.setdefault(f"F1-{algo_name}-std", []).append(np.std(f1s))
                 data.setdefault(f"RT-{algo_name}-mean", []).append(np.mean(runtimes))
-                data.setdefault(f"RT-{algo_name}-std", []).append(np.std(runtimes))
+                # data.setdefault(f"RT-{algo_name}-std", []).append(np.std(runtimes))
                 print(f"{algo_name}: F1={np.mean(f1s):.3f} ± {np.std(f1s):.3f}, RT={np.mean(runtimes):.3f} ± {np.std(runtimes):.3f}")
             else:
                 data.setdefault(f"F1-{algo_name}-mean", []).append(None)
-                data.setdefault(f"F1-{algo_name}-std", []).append(None)
+                # data.setdefault(f"F1-{algo_name}-std", []).append(None)
                 data.setdefault(f"RT-{algo_name}-mean", []).append(None)
-                data.setdefault(f"RT-{algo_name}-std", []).append(None)
+                # data.setdefault(f"RT-{algo_name}-std", []).append(None)
                 print(f"{algo_name}: Skipped all paths due to invalid LP.")
 
     df = pd.DataFrame.from_dict(data)
-    output_dir = f"Experiments_{args.operation}"
+    output_dir = f"Experiments_{args.operation}_cache"
     os.makedirs(output_dir, exist_ok=True)
 
     if args.operation == "normal":
-        df.to_csv(f"{output_dir}/{args.data_name}_{args.reasoner}.csv", index=False)
+        gamma_str = str(args.gamma).replace(".", "_")
+        df.to_csv(f"{output_dir}/{args.data_name}_gamma_{gamma_str}.csv", index=False)
     else:
         ratio_str = str(args.ratio).replace(".", "_")
         df.to_csv(f"{output_dir}/{args.data_name}_{args.reasoner}_{ratio_str}.csv", index=False)
@@ -197,8 +200,9 @@ if __name__ == '__main__':
     parser.add_argument("--kb", type=str, default="KGs/Family/family-benchmark_rich_background.owl")#,required=True)
     parser.add_argument("--path_pretrained_kge", type=str, default=None)
     parser.add_argument("--data_name", type=str, default="family")
-    parser.add_argument("--reasoner", type=str, default="EBR", choices=["EBR", "Pellet", "HermiT", "JFact", "Openllet", "Structural", "abstract_reasoner"])
+    parser.add_argument("--reasoner", type=str, default="abstract_reasoner", choices=["EBR", "Pellet", "HermiT", "JFact", "Openllet", "Structural", "abstract_reasoner"])
     parser.add_argument("--operation", type=str, default="normal", choices=["incomplete", "inconsistent", "normal"])
     parser.add_argument("--use_cache", type=bool, default=False, help="Use the semantic cache for the reasoners")
     parser.add_argument("--ratio", type=float, default=0.1, help="level of incompleteness, inconsistencies")
+    parser.add_argument("--gamma", type=float, default=0.5, help="Threshold for EBR")
     dl_concept_learning(parser.parse_args())

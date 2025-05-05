@@ -345,7 +345,7 @@ def semantic_caching_size(func, cache_size, eviction_strategy, random_seed, cach
             based on the Algorithm described in the paper
             """
             
-            if len(All_individuals)<1000: # The loop beomes unscalable when there are too many individuals 
+            if len(All_individuals)<1:#000: # The loop beomes unscalable when there are too many individuals 
                 object_property = owl_expression.get_property()
                 filler_expression = owl_expression.get_filler()
                 instances = retrieve_from_cache(owl_expression_to_dl(filler_expression))
@@ -355,10 +355,11 @@ def semantic_caching_size(func, cache_size, eviction_strategy, random_seed, cach
                         r = onto.search_one(iri=object_property.get_inverse_property().str)
                     else:
                         r = onto.search_one(iri=object_property.str)
-                    individual_map = {ind: onto.search_one(iri=ind) for ind in All_individuals | instances}
+                    A =  {instance.str for instance in instances}
+                    individual_map = {ind: onto.search_one(iri=ind) for ind in All_individuals | A}
                     for ind_a in All_individuals:
                         a = individual_map[ind_a]
-                        for ind_b in instances:
+                        for ind_b in A:
                             b = individual_map[ind_b]
                             if isinstance(object_property, OWLObjectInverseOf):
                                 if a in getattr(b, r.name):
