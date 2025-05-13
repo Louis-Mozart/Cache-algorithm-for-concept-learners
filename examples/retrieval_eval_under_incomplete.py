@@ -124,7 +124,7 @@ def execute(args):
         expressions = df["Expression"].tolist()
         
         ontology_path = path
-        reasoners = ['HermiT', 'Pellet', 'JFact', 'Openllet']
+        reasoners = ['Structural', 'HermiT', 'Pellet', 'JFact', 'Openllet']
         reasoner_jaccards = {reasoner: [] for reasoner in reasoners}
         reasoner_times = {reasoner: [] for reasoner in reasoners}  # To store running times
 
