@@ -10,12 +10,13 @@ We based our implementation on [Ontolearn](https://github.com/dice-group/Ontolea
 ```shell
 # To create a virtual python env with conda 
 conda create -n venv python=3.10.14 --no-default-packages && conda activate venv && pip install -e . && cd Ontolearn
-# To download the benchmark datasets knowledge graphs
-wget https://files.dice-research.org/projects/Ontolearn/KGs.zip -O ./KGs.zip && unzip KGs.zip
-# To downlaod the learning problems
-wget https://files.dice-research.org/projects/Ontolearn/LPs.zip -O ./LPs.zip && unzip LPs.zip
+# To unzip the benchmark datasets knowledge graphs
+unzip KGs.zip
+# To unzip the learning problems
+unzip LPs.zip
 ```
-Other datasets used in the paper can be found [here](wget https://files.dice-research.org/datasets/dice-embeddings/KGs.zip --no-check-certificate && unzip KGs.zip)
+Other datasets and learning problems can be downloaded [here](wget https://shorturl.at/CfVlF/datasets.zip
+) 
 
 ## Retrieval results on error free datasets 
 
