@@ -15,8 +15,7 @@ unzip KGs.zip
 # To unzip the learning problems
 unzip LPs.zip
 ```
-Other datasets and learning problems can be downloaded [here](wget https://shorturl.at/CfVlF/datasets.zip
-) 
+Other datasets and learning problems can be manually downloaded from [here](https://drive.google.com/file/d/1LWmrtVQFh2_9eWOUsGZTGVeTkxi3n5pk/view?usp=sharing) 
 
 ## Retrieval results on error free datasets 
 
