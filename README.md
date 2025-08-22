@@ -2,13 +2,13 @@
 
 ## Caching Algorithm for Ontology Reasoners
 
-This repository contains our caching algorithm designed to optimize ontology instance retrieval by accelerating reasoners. The implementation supports various eviction strategies and can be configured to use different cache types and sizes. Below, you will find the instructions to run the algorithm and generate the results.
+This repository contains our caching algorithm designed to optimize ontology instance retrieval by accelerating reasoners. The implementation supports various eviction strategies and can be configured to use different cache types and sizes. Below, I have for you the instructions to run the algorithm and generate the results.
 
 
 ## Installation
 
 ```shell
-# First you need to downlad this repository and make sure you are in to it. Then follow the steps below
+# First, you need to download this repository and make sure you are in to it. Then follow the steps below
 
 # To create a virtual python env with conda 
 conda create -n venv python=3.10.14 --no-default-packages && conda activate venv && pip install -e . && cd Ontolearn
