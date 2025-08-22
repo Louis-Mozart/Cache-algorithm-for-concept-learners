@@ -2,7 +2,7 @@
 
 ## Caching Algorithm for Ontology Reasoners
 
-This repository contains our caching algorithm designed to optimize ontology instance retrieval by accelerating reasoners. The implementation supports various eviction strategies and can be configured to use different cache types and sizes. Below, I have for you the instructions to run the algorithm and generate the results.
+This repository contains our caching algorithm designed to optimize ontology instance retrieval by accelerating reasoners. The implementation supports various eviction strategies and can be configured to use different cache types and sizes. Below, I have for you with the instructions to run the algorithm and generate the results.
 
 
 ## Installation
@@ -31,7 +31,7 @@ To run the EBR reasoner on the Family and Father datasets with cache size ratios
 
 #### Caching the reasoners
 
- To run the EBR reasoner on the Family and Father datasets, with ratios 0.1, 0.4 and 0.8, on a cold cache (i.e. we initialize the cache with few concepts), using the LRU eviction strategy, first make sure you are located in this directory then run
+ To run the EBR reasoner on the Family and Father datasets, with ratios 0.1, 0.4 and 0.8, on a cold cache (i.e. we initialize the cache with few concepts), using the LRU eviction strategy, first make sure you are located in this directory, then run
 
 ```shell
 python examples/retrieval_with_cache.py --cache_size_ratios [.1, .4, .8] \
@@ -42,7 +42,7 @@ python examples/retrieval_with_cache.py --cache_size_ratios [.1, .4, .8] \
                         --cache_type cold \
                         --shuffle_concepts
 ```
-The results would be saved as two csv files in this same directory for further analysis. If you want the results for only datasets, just put the to path the dataset inside the list similarly for the ratio.
+The results would be saved as two csv files in this same directory for further analysis. If you want the results for only datasets, just put the path to the dataset inside the list, similarly for the ratio.
 e.g. we can run the above code only for the Father dataset and with a cache size ratio of 0.8 as
 
 ```shell
@@ -59,7 +59,7 @@ To see the results for other reasoners, you can replace EBR with any other reaso
 
 ### Caching the concept learners
 
-In the experiments all the concept learners where ran using their default reasoners `abstract_reasoner` so to evaluate the results with cache, run
+In the experiments, all the concept learners were run using their default reasoners `abstract_reasoner` so as to evaluate the results with cache, run
 
 ```shell
 python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Family/family-benchmark_rich_background.owl --data_name Family
@@ -71,7 +71,7 @@ To use a different reasoner, ["Pellet", "HermiT", "JFact", "Openllet", "Structur
 python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Family/family-benchmark_rich_background.owl --data_name Family --reasoner Pellet
 ```
 
-The default max runtime is 60s but this can be changed using the `--max_runtime` flag e.g, to run for 3 minutes
+The default max runtime is 60s, but this can be changed using the `--max_runtime` flag e.g, to run for 3 minutes
 
 ```shell
 python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Family/family-benchmark_rich_background.owl --data_name Family --reasoner Pellet --max_runtime 180
@@ -79,7 +79,7 @@ python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Famil
 
 ### Running on Other Datasets
 
-For some datasets (Carcinogenesis, Mutagenesis, Vicodi), the learning problems are in the `datasets/` folder example for Carcinogenesis
+For some datasets (Carcinogenesis, Mutagenesis, Vicodi), the learning problems are in the `datasets/` folder example, for Carcinogenesis
 
 ```shell
 python examples/run_cache_comparison.py --lps datasets/carcinogenesis/training_data/training_data_prep.json --kb  datasets/carcinogenesis/kb/ontology.owl --data_name carcinogenesis
