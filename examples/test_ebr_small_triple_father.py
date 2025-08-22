@@ -115,8 +115,6 @@ print(owl_expression_to_dl(expression))
 # print(neural_owl_reasoner.model.predict(h="http://example.com/father#markus", r="http://example.com/father#hasChild", t="http://example.com/father#anna",logits=False))
 
 
-# exit(0)
-
 retrieval_y, runtime_y = concept_retrieval(symbolic_kb_true, expression) #The groundtruth retrieval
 # () Retrieve a set of inferred individuals and elapsed runtime.
 retrieval_ebr, runtime_ebr = concept_retrieval(neural_owl_reasoner, expression) #Retrieval for EBR 
@@ -128,7 +126,7 @@ retrieval_ebr = {iri for iri in retrieval_ebr if iri in named_individuals}
 retrieval_fic, runtime_fic = concept_retrieval(symbolic_kb_diminished, expression) #Retrieval for EBR 
 
 
-# () Compute the Jaccard similarity.
+# Compute the Jaccard similarity.
 jaccard_sim_EBR = jaccard_similarity(retrieval_y, retrieval_ebr)
 jaccard_sim_fic = jaccard_similarity(retrieval_y, retrieval_fic)
 
