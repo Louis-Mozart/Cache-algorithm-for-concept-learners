@@ -166,9 +166,9 @@ def dl_concept_learning(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Description Logic Concept Learning')
     parser.add_argument("--max_runtime", type=int, default=60)
-    parser.add_argument("--lps", type=str, default="LPs/Family/lps.json")#, required=True)
+    parser.add_argument("--lps", type=str, default="LPs/Family/lps.json")
     parser.add_argument("--lps_difficult", type=str, default=None)#, required=True)datasets/family/training_data/training_data_prep.json
-    parser.add_argument("--kb", type=str, default="KGs/Family/family-benchmark_rich_background.owl")#,required=True)
+    parser.add_argument("--kb", type=str, default="KGs/Family/family-benchmark_rich_background.owl")
     parser.add_argument("--path_pretrained_kge", type=str, default=None)
     parser.add_argument("--data_name", type=str, default="family")
     parser.add_argument("--reasoner", type=str, default="EBR", choices=["EBR", "Pellet", "HermiT", "JFact", "Openllet", "Structural", "abstract_reasoner"])
