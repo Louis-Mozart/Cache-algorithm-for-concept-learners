@@ -48,7 +48,7 @@ pd.set_option('display.expand_frame_repr', False)
 from rdflib import Graph, Namespace, URIRef, RDF
 import os
 
-
+#Seems not to be working
 
 def remove_percentage_of_type(input_owl_path, output_owl_path, type_name, percentage_to_remove):
     # Load the ontology
