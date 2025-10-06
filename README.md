@@ -99,7 +99,7 @@ python examples/run_cache_comparison.py --lps datasets/vicodi/training_data/trai
 
 ## Output
 
-The results of these experiments will be saved in a new directory named `Experiments_normal_cache`.
+The results of the experiments will then be saved in a new directory named `Experiments_normal_cache`.
 Each reasoner will have a corresponding subdirectory, and the results will be stored in CSV format for further analysis.
 
 ### Example Results for Concept learning
