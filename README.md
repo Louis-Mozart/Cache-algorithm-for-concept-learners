@@ -59,7 +59,7 @@ To see the results for other reasoners, you can replace EBR with any other reaso
 
 ### Caching the concept learners
 
-In the experiments, all the concept learners were run using their default reasoners `abstract_reasoner` so as to evaluate the results with cache, run
+In the experiments, all the concept learners were run using their default reasoners `abstract_reasoner` to evaluate the results with cache, run
 
 ```shell
 python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Family/family-benchmark_rich_background.owl --data_name Family
