@@ -71,7 +71,7 @@ To use a different reasoner, ["Pellet", "HermiT", "JFact", "Openllet", "Structur
 python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Family/family-benchmark_rich_background.owl --data_name Family --reasoner Pellet
 ```
 
-The default max runtime is 60s, but this can be changed using the `--max_runtime` flag e.g, to run for 3 minutes
+The default max runtime is 60s, but this can be changed using the `--max_runtime` flag, e.g, to run for 3 minutes
 
 ```shell
 python examples/run_cache_comparison.py --lps LPs/Family/lps.json --kb KGs/Family/family-benchmark_rich_background.owl --data_name Family --reasoner Pellet --max_runtime 180
