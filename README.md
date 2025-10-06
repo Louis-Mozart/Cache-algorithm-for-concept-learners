@@ -31,7 +31,7 @@ To run the EBR reasoner on the Family and Father datasets with cache size ratios
 
 #### Caching the reasoners
 
- To run the EBR reasoner on the Family and Father datasets, with ratios 0.1, 0.4, and 0.8, on a cold cache (i.e., we initialize the cache with few concepts), using the LRU eviction strategy, first make sure you are located in this directory, then run
+ To run the EBR reasoner on the Family and Father datasets, with ratios 0.1, 0.4, and 0.8, on a cold cache (i.e., we initialize the cache with a few concepts), using the LRU eviction strategy, first make sure you are located in this directory, then run
 
 ```shell
 python examples/retrieval_with_cache.py --cache_size_ratios [.1, .4, .8] \
