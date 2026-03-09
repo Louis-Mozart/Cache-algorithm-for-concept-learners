@@ -11,9 +11,9 @@ from ontolearn.semantic_caching import run_semantic_cache, concept_generator
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--cache_size_ratios', type=list, default=[.1, .2, .4, .8, 1.], help="cache size is proportional to num_concepts, cache size = k * num_concepts")
-parser.add_argument('--path_kg', type=str, default=["KGs/Family/family.owl"])
-parser.add_argument('--path_kge', type=list, default=None)
+parser.add_argument('--cache_size_ratios', type=float, nargs='+', default=[.1, .2, .4, .8, 1.], help="cache size is proportional to num_concepts, cache size = k * num_concepts")
+parser.add_argument('--path_kg', type=str, nargs='+', default=["KGs/Family/family.owl"])
+parser.add_argument('--path_kge', type=str, nargs='*', default=None)
 parser.add_argument('--name_reasoner', type=str, default='EBR', choices=["EBR",'HermiT', 'Pellet', 'JFact', 'Openllet'])
 parser.add_argument('--eviction_strategy', type=str, default='LRU', choices=['LIFO', 'FIFO', 'LRU', 'MRU', 'RP'])
 parser.add_argument('--random_seed_for_RP', type=int, default=10, help="Random seed if the eviction startegy is RP")
@@ -31,6 +31,9 @@ def get_cache_size(list_k, path_kg):
 results = []
 detailed_results = []
 for path_kg in args.path_kg:
+    # print(args.path_kg)
+    # print(args.cache_size_ratios)
+    # exit(0)
     for cache_size in get_cache_size(args.cache_size_ratios, path_kg):
         for strategy in ['LIFO', 'FIFO', 'LRU', 'MRU', 'RP']:
             result, detailed = run_semantic_cache(
