@@ -39,6 +39,7 @@ from owlapy.class_expression import (
 )
 from owlapy.owl_property import OWLObjectInverseOf
 from owlapy.iri import IRI
+import sys
 import time
 from functools import lru_cache
 from typing import Set, Dict, Any, Tuple
@@ -56,6 +57,8 @@ from tqdm import tqdm
 
 def concept_generator(path_kg):
     # (1) Initialize knowledge base.
+    # print(path_kg)
+    # exit(0)
     assert os.path.isfile(path_kg)
    
     symbolic_kb = KnowledgeBase(path=path_kg)
@@ -464,6 +467,25 @@ def semantic_caching_size(func, cache_size, eviction_strategy, random_seed, cach
         }
 
     wrapper.get_stats = get_stats
+
+    def get_cache_memory_bytes():
+        """Return the deep memory footprint of the cache in bytes."""
+        total = sys.getsizeof(cache.cache) + sys.getsizeof(cache.access_times)
+        counted_ids = set()
+        for k, v in cache.cache.items():
+            if id(k) not in counted_ids:
+                total += sys.getsizeof(k)
+                counted_ids.add(id(k))
+            if id(v) not in counted_ids:
+                total += sys.getsizeof(v)  # set overhead
+                counted_ids.add(id(v))
+                for item in v:
+                    if id(item) not in counted_ids:
+                        total += sys.getsizeof(item)
+                        counted_ids.add(id(item))
+        return total
+
+    wrapper.get_cache_memory_bytes = get_cache_memory_bytes
     return wrapper
 
 
@@ -527,6 +549,28 @@ def non_semantic_caching_size(func, cache_size):
         }
     
     wrapper.get_stats = get_stats
+
+    def get_cache_memory_bytes():
+        """Return the deep memory footprint of the non-semantic cache (OrderedDict) in bytes."""
+        total = sys.getsizeof(cache)
+        counted_ids = set()
+        for k, v in cache.items():
+            if id(k) not in counted_ids:
+                total += sys.getsizeof(k)
+                counted_ids.add(id(k))
+            if id(v) not in counted_ids:
+                total += sys.getsizeof(v)
+                counted_ids.add(id(v))
+                try:
+                    for item in v:
+                        if id(item) not in counted_ids:
+                            total += sys.getsizeof(item)
+                            counted_ids.add(id(item))
+                except TypeError:
+                    pass
+        return total
+
+    wrapper.get_cache_memory_bytes = get_cache_memory_bytes
     return wrapper
 
 
@@ -779,6 +823,7 @@ def run_semantic_cache(path_kg:str, path_kge:str, cache_size:int, name_reasoner:
         # assert jacc == 1.0 
 
     stats = cached_retriever.get_stats()
+    cache_memory_bytes = cached_retriever.get_cache_memory_bytes()
     
     print('-'*50)
     print("Cache Statistics:")
@@ -789,6 +834,8 @@ def run_semantic_cache(path_kg:str, path_kge:str, cache_size:int, name_reasoner:
     print(f"Total Time Without Caching: {total_time_ebr:.4f} seconds")
     print(f"Total number of concepts: {len(alc_concepts)}")
     print(f"Average Jaccard for the {data_name} dataset", sum(Avg_jaccard)/len(Avg_jaccard))
+    print(f"Cache Memory Usage: {cache_memory_bytes / 1024:.2f} KB ({cache_memory_bytes / (1024**2):.4f} MB)")
+
 
     return {
         'dataset': data_name,
@@ -800,7 +847,9 @@ def run_semantic_cache(path_kg:str, path_kge:str, cache_size:int, name_reasoner:
         '#concepts': len(alc_concepts),
         'avg_jaccard': f"{sum(Avg_jaccard) / len(Avg_jaccard):.3f}",
         'avg_jaccard_reas':  f"{sum(Avg_jaccard_reas) / len(Avg_jaccard_reas):.3f}",
-        'strategy': eviction
+        'strategy': eviction,
+        'cache_memory_bytes': cache_memory_bytes,
+
     }, D
 
 
@@ -859,7 +908,8 @@ def run_non_semantic_cache(path_kg:str, path_kge:str, cache_size:int, name_reaso
         # assert jacc == 1.0 
 
     stats = cached_retriever.get_stats()
-    
+    cache_memory_bytes = cached_retriever.get_cache_memory_bytes()
+
     print('-'*50)
     print("Cache Statistics:")
     print(f"Hit Ratio: {stats['hit_ratio']:.2f}")
@@ -869,6 +919,7 @@ def run_non_semantic_cache(path_kg:str, path_kge:str, cache_size:int, name_reaso
     print(f"Total Time Without Caching: {total_time_ebr:.4f} seconds")
     print(f"Total number of concepts: {len(alc_concepts)}")
     print(f"Average Jaccard for the {data_name} dataset", sum(Avg_jaccard)/len(Avg_jaccard))
+    print(f"Cache Memory Usage: {cache_memory_bytes / 1024:.2f} KB ({cache_memory_bytes / (1024**2):.4f} MB)")
 
     return {
         'dataset': data_name,
@@ -879,7 +930,8 @@ def run_non_semantic_cache(path_kg:str, path_kge:str, cache_size:int, name_reaso
         'RT': f"{total_time_ebr:.3f}",
         '#concepts': len(alc_concepts),
         'avg_jaccard': f"{sum(Avg_jaccard) / len(Avg_jaccard):.3f}",
-        'avg_jaccard_reas':  f"{sum(Avg_jaccard_reas) / len(Avg_jaccard_reas):.3f}"
+        'avg_jaccard_reas':  f"{sum(Avg_jaccard_reas) / len(Avg_jaccard_reas):.3f}",
+        'cache_memory_bytes': cache_memory_bytes,
     }, D
 
 def run_subsumption_cache(path_kg:str, path_kge:str, cache_size:int, name_reasoner:str, eviction:str, random_seed:int, cache_type:str, shuffle_concepts:str):

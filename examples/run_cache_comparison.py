@@ -13,7 +13,7 @@ from owlapy.owl_individual import OWLNamedIndividual, IRI
 import argparse
 from ontolearn.utils.static_funcs import compute_f1_score
 import random
-from examples.retrieval_eval_under_incomplete import generate_subgraphs
+# from examples.retrieval_eval_under_incomplete import generate_subgraphs
 import numpy as np
 import os
 from ontolearn.refinement_operators import ExpressRefinement, ModifiedCELOERefinement
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     parser.add_argument("--kb", type=str, default="KGs/Family/family-benchmark_rich_background.owl")
     parser.add_argument("--path_pretrained_kge", type=str, default=None)
     parser.add_argument("--data_name", type=str, default="family")
-    parser.add_argument("--reasoner", type=str, default="EBR", choices=["EBR", "Pellet", "HermiT", "JFact", "Openllet", "Structural", "abstract_reasoner"])
+    parser.add_argument("--reasoner", type=str, default="abstract_reasoner", choices=["EBR", "Pellet", "HermiT", "JFact", "Openllet", "Structural", "abstract_reasoner"])
     parser.add_argument("--operation", type=str, default="normal", choices=["incomplete", "inconsistent", "normal"])
     parser.add_argument("--use_cache", type=bool, default=True, help="Use the semantic cache for the reasoners")
     parser.add_argument("--ratio", type=float, default=0.1, help="level of incompleteness, inconsistencies")

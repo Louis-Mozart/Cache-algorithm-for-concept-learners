@@ -1,0 +1,9 @@
+CEL,mode,cache_memory_MB
+CELOE,semantic,1101.875967
+EvoLearner,semantic,26.787931
+CLIP,semantic,1047.511866
+CELOE,non_semantic,1083.240963
+EvoLearner,non_semantic,21.507107
+CLIP,non_semantic,1066.182494
+OCEL,semantic,5492.678056
+OCEL,non_semantic,5495.83474
