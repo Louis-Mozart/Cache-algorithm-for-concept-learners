@@ -29,7 +29,7 @@ Caching the Reasoners
 
 To run the EBR reasoner on the Family and Father datasets with cache size ratios of 0.1, 0.4, and 0.8, using a cold cache and LRU strategy:
 
-#### Caching the reasoners
+### Caching the reasoners
 
  To run the EBR reasoner on the Family and Father datasets, with ratios 0.1, 0.4, and 0.8, on a cold cache (i.e., we initialize the cache with a few number of concepts), using the LRU eviction strategy, first make sure you are located in this directory, then run
 
