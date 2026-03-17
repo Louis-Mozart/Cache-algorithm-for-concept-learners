@@ -43,7 +43,7 @@ python examples/retrieval_with_cache.py --cache_size_ratios [.1, .4, .8] \
                         --shuffle_concepts
 ```
 The results would be saved as two CSV files in this same directory for further analysis. If you want the results for only one dataset, just put the path to the dataset inside the list, similarly for the ratio.
-e.g., we can run the above code only for the Father dataset and with a cache size ratio of 0.8 as
+e.g., we can run the above code only for the Father dataset and with a cache size ratio of 0.8 as follow
 
 ```shell
 python examples/retrieval_with_cache.py --cache_size_ratios [.8] \
