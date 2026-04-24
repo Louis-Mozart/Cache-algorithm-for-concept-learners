@@ -1,5 +1,4 @@
 
-
 ## Semantics-Aware Caching Algorithm for Concept Learning
 
 This repository contains our caching algorithm designed to optimize ontology instance retrieval by accelerating reasoners or concept learners. The implementation supports various eviction strategies and can be configured to use different cache types and sizes. Below, I have provided you with the instructions to run the algorithm and generate the results.
